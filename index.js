@@ -304,7 +304,45 @@ boost - ⚡ XP Boost (100 coins)`
       }
 
 
-      if(cmd === "/ask"){
+      if(cmd === "/kick") {
+
+  if(!from.endsWith("@g.us"))
+    return sock.sendMessage(from,{
+      text:"❌ Group only"
+    })
+
+  const metadata = await sock.groupMetadata(from)
+
+  const admins = metadata.participants
+    .filter(p => p.admin)
+    .map(p => p.id)
+
+  if(!admins.includes(sender))
+    return sock.sendMessage(from,{
+      text:"❌ Admin only"
+    })
+
+  const mentioned =
+  msg.message.extendedTextMessage
+  ?.contextInfo
+  ?.mentionedJid
+
+  if(!mentioned)
+    return sock.sendMessage(from,{
+      text:"❌ Tag user"
+    })
+
+  await sock.groupParticipantsUpdate(
+    from,
+    mentioned,
+    "remove"
+  )
+
+  return sock.sendMessage(from,{
+    text:"🚫 User removed"
+  })
+
+      }
 
         const question =
         text.replace("/ask","").trim()
