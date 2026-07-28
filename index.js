@@ -75,26 +75,27 @@ async function startBot() {
 
   sock.ev.on("connection.update", (update) => {
 
-    const { connection, lastDisconnect } = update
+  const { connection, lastDisconnect } = update
 
+  if (connection === "open") {
+    console.log("✅ WhatsApp Connected")
+  }
 
-    if (connection === "open") {
-      console.log("✅ WhatsApp Connected")
+  if (connection === "close") {
+
+    const shouldReconnect =
+      lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
+
+    if (shouldReconnect) {
+      console.log("🔄 Reconnecting...")
+      setTimeout(() => startBot(), 3000)
+    } else {
+      console.log("❌ Logged out")
     }
 
+  }
 
-    if (connection === "close") {
-
-      const shouldReconnect =
-        lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
-
-      if (shouldReconnect) {
-  console.log("🔄 Reconnecting...")
-  setTimeout(() => startBot(), 3000)
-      }
-      } else {
-        console.log("❌ Logged out")
-      }
+})
 
     }
 
