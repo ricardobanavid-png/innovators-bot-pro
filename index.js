@@ -2,12 +2,15 @@ const express = require("express")
 const app = express()
 
 async function startBot() {
+async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState("auth")
 
   const sock = makeWASocket({
     auth: state,
     printQRInTerminal: false
   })
+
+  sock.ev.on("creds.update", saveCreds)
 
   if (!state.creds.registered) {
     setTimeout(async () => {
@@ -16,7 +19,7 @@ async function startBot() {
     }, 3000)
   }
 
-  sock.ev.on("creds.update", saveCreds)
+  sock.ev.on("messages.upsert", async ({ messages }) => {
 
 const fetch = require("node-fetch")
 require("dotenv").config()
