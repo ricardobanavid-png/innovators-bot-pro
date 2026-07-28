@@ -63,8 +63,8 @@ async function startBot() {
     setTimeout(async () => {
 
       const code = await sock.requestPairingCode(
-        process.env.BOT_NUMBER
-      )
+  process.env.BOT_NUMBER.replace(/[^0-9]/g, "")
+)
 
       console.log("PAIRING CODE:", code)
 
