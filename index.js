@@ -33,14 +33,18 @@ function today() {
 }
 
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState("auth")
+  const { state, saveCreds } = await useMultiFileAuthState("auth"
+                                                           const sock = makeWASocket({
+  auth: state,
+  printQRInTerminal: false
+})
 
-  const sock = makeWASocket({
-    auth: state,
-    printQRInTerminal: true
-  })
-
-  sock.ev.on("creds.update", saveCreds)
+if (!state.creds.registered) {
+  setTimeout(async () => {
+    const code = await sock.requestPairingCode(process.env.BOT_NUMBER)
+    console.log("PAIRING CODE:", code)
+  }, 3000)
+}
 
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0]
