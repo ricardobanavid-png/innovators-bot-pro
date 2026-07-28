@@ -1,7 +1,21 @@
 const express = require("express")
 const app = express()
 
-async function startBot() {
+const {
+  default: makeWASocket,
+  useMultiFileAuthState
+} = require("@whiskeysockets/baileys")
+
+const fetch = require("node-fetch")
+require("dotenv").config()
+
+app.get("/", (req, res) => res.send("Bot running 🚀"))
+app.listen(3000, () => console.log("Server running"))
+
+const users = {}
+const lastSeen = {}
+const activeGame = {}
+
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState("auth")
 
@@ -19,6 +33,7 @@ async function startBot() {
     }, 3000)
   }
 
+  // your messages.upsert code starts here
   sock.ev.on("messages.upsert", async ({ messages }) => {
 
 const fetch = require("node-fetch")
