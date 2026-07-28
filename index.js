@@ -81,18 +81,30 @@ async function startBot() {
     console.log("✅ WhatsApp Connected")
   }
 
+
   if (connection === "close") {
 
     const shouldReconnect =
       lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
 
-    setTimeout
 
-})
+    if (shouldReconnect) {
+
+      console.log("🔄 Reconnecting...")
+
+      setTimeout(() => {
+        startBot()
+      }, 3000)
+
+    } else {
+
+      console.log("❌ Logged out")
 
     }
 
-  })
+  }
+
+})
 
 
   sock.ev.on("messages.upsert", async ({ messages }) => {
