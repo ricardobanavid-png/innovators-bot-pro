@@ -242,3 +242,4 @@ Status: ${users[sender].vip ? "👑 VIP" : "Normal"}`
 }
 
 startBot()
+2348012345678
