@@ -1,10 +1,22 @@
 const express = require("express")
 const app = express()
 
-const {
-  default: makeWASocket,
-  useMultiFileAuthState
-} = require("@whiskeysockets/baileys")
+async function startBot() {
+  const { state, saveCreds } = await useMultiFileAuthState("auth")
+
+  const sock = makeWASocket({
+    auth: state,
+    printQRInTerminal: false
+  })
+
+  if (!state.creds.registered) {
+    setTimeout(async () => {
+      const code = await sock.requestPairingCode(process.env.BOT_NUMBER)
+      console.log("PAIRING CODE:", code)
+    }, 3000)
+  }
+
+  sock.ev.on("creds.update", saveCreds)
 
 const fetch = require("node-fetch")
 require("dotenv").config()
