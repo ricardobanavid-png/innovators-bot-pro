@@ -77,6 +77,7 @@ async function startBot() {
 
   const { connection, lastDisconnect } = update
 
+
   if (connection === "open") {
     console.log("✅ WhatsApp Connected")
   }
